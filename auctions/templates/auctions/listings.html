@@ -1,0 +1,164 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+    {% if not listing.active %}
+        <h1>Auction is CLOSED</h1>
+    {% endif %}
+    <h2>The listing: {{ listing.title }}</h2>
+
+    <div class="card mb-3 listing">
+        <div>
+            <ul class="nav nav-pills card-header-pills">
+                {% if in_watchlist %}
+                    <li class="nav-item">
+                        <a class="nav-link active watching" 
+                            href="{% url 'toggle_watchlist' listing.id %}" 
+                            style="font-size:15px;">
+                                Remove from watchlist
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link active watching" 
+                            href="{% url 'toggle_watchlist' listing.id %}" 
+                            style="font-size:15px;">
+                                Add to watchlist
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="card-body">
+            <div>
+                <img class="card-img-top" src={{ listing.listing_url }} 
+                    style="width: 30%;" alt="Card image cap">
+            </div>
+            {% if listing.active and user.is_authenticated and listing.user_id == user %}
+                <div class="mt-4 close_listing">
+                        <h3 class="text-danger">Close the Auction</h3>
+                        <p>This will make the highest bidder the winner of the action, 
+                            and make the listing inactive.
+                        </p>
+                        <a href="{% url 'close_auction' listing.id %}">
+                            <button type="button" class="mt-2 btn btn-danger">
+                                Close Auction
+                            </button>
+                        </a>
+                </div>
+            {% endif %}
+        </div>
+        <div>
+            {% if listing.active %}
+            <div class="bid">
+                <h5 class="card-title">
+                    Current price: 
+                        {% if max_bid == listing.starting_bid %}
+                            <b style="color: green;">No bids yet.</b>
+                        {% else %}
+                            <b>${{ max_bid }}</b>
+                        {% endif %}
+                </h5>
+                <h6 class="card-title">
+                    {% if bids > 2 %}
+                        <small>Total of {{ bids }} bids.</small>
+                    {% elif bids == 1 %}
+                        <small>Total is {{ bids }} bid.</small>
+                    {% endif %}
+                    {% if current_bidder and user.is_authenticated and current_bidder == request.user %}
+                        <small> You are the highest bidder!</small>
+                    {% elif current_bidder and user.is_authenticated %}
+                        <small> Highest bidder is {{ current_bidder }}</small>
+                    {% endif %}
+                </h6>
+
+                <h5 class="card-title">
+                    Starting price: <b>${{ listing.starting_bid }}</b>           
+                </h5>
+                <form action="{% url 'listing_details' listing.id %}" method="post">
+                    {% csrf_token %}
+                    {{ bid }}
+                    <input type="submit" value="$ Place the bid $" class="place_bid">
+                </form>
+                {% if message %}
+                    <p style="color: white;">{{message}}</p>
+                {% endif %}
+            </div>
+            {% else %}
+                <h3 class="text-danger">This auction has been closed.</h3>
+                <h5 class="card-title">
+                    Final price: 
+                        {% if max_bid == listing.starting_bid %}
+                            <b style="color: green;">With no bids.</b>
+                        {% else %}
+                            <b>${{ max_bid }}</b>
+                        {% endif %}
+                </h5>
+                {% if listing.winner == user %}
+                    <h3>You are the winner!</h3>
+                {% endif %}
+            {% endif %}
+            <hr />
+            <h5 class="card-title"><b>Details:</b></h5>
+            <p class="card-text">{{ listing.description }}</p>
+            <ul>
+                <li>
+                    <small class="text-muted">
+                        Category: {{ listing.category }}
+                    </small>
+                </li>
+                <li>
+                    <small class="text-muted">
+                        Created by: {{ listing.user_id.first_name }}
+                    </small>
+                </li>
+                <li>
+                    <small class="text-muted">
+                        Created on: {{ listing.created }}
+                    </small>
+                </li>
+            </ul>
+            <hr />
+            <div class="comment_box">
+                <div class="mt-4 add_comment">
+                    <h5>Add comment for the item:</h5>
+                    <form action="{% url 'comment' listing.id %}" method="post">
+                        {% csrf_token %}
+                        {{ comment }}
+                        <input type="submit" 
+                            value="Submit the comment" 
+                            class="place_comment">
+                    </form>
+                </div>
+                <div class="mt-4">
+                    <h5>All the comments:</h5>
+                    {% if any_comments %}
+                            {% for comment in comments %}
+                                <hr />
+                                <h5>{{ comment.user_id }}</h5>
+                                <p>{{ comment.comment_content }}</p>
+                                <p>
+                                    <small class="text-muted">
+                                        {{ comment.created }}
+                                    </small>
+                                </p>
+                                <hr />
+                            {% endfor %}
+                    {% else %}
+                        <p>No comments yet.</p>
+                    {% endif %}
+                </div>
+            </div>  
+        </div>
+    </div>
+{% endblock %}
+
+
+
+<!-- <h6 class="card-title">
+    {% if current_bidder and user.is_authenticated and current_bidder == user %}
+        <small> You are the highest bidder!</small>
+    {% elif current_bidder and user.is_authenticated %}
+        <small> Highest bidder is {{ current_bidder }}</small>
+    {% endif %}
+</h6> -->

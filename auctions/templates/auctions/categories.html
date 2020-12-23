@@ -1,0 +1,18 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Categories.</h2>
+
+    <div class="card-deck">
+    {% for category in categories %}
+        <div class="card" style="min-width:30%; background-color:lightgrey;">
+            <a href="{% url 'category_listing' category %}" class="btn btn-primary category" style="background-color:#7c4a24">
+                <img class="card-img-top category" src="static/auctions/images/{{ category.lower }}.jpg" alt="Card image cap">
+            </a>
+            <div class="card-body">
+              <h5 class="card-title" style="text-align: center;">{{ category }}</h5>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

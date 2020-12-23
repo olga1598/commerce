@@ -1,0 +1,87 @@
+body {
+    padding: 10px;
+    background-color: #d5dadd;
+    
+}
+
+h1, h2 {
+    color: #7c4a24;
+}
+
+.add_listing {
+    background-color: #a07945;
+    width: 100%;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.details {
+    background-color: #a07945 !important;
+    font-weight: bold;
+    color: white;
+}
+
+.details:hover {
+
+}
+
+.watching, .place_bid, .place_comment {
+    background-color: #a07945 !important;
+}
+
+.add_listing:hover, .watching:hover {
+    background-color: #7c4a24;
+    color: #d5dadd;
+}
+
+.nav {
+    padding: 10px;
+}
+
+.nav-link:hover, .place_bid:hover, .place_comment:hover {
+    background-color: #7c4a24 !important;
+    color: #d5dadd !important;
+}
+
+.add_comment, .bid{
+    background-color: #a07945;
+    padding: 20px;
+}
+
+.card {
+    padding: 20px;
+}
+
+#id_comment {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.create_form {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.jumbotron {
+    background-color: #d1ccc4 !important;
+}
+
+.listing, .nav, .active_listings {
+    background-color: #d1ccc4 !important;
+}
+
+.nav-item > a {
+    color: #7c4a24 !important;
+    font-weight: bold;
+}
+
+.create {
+    color: #7c4a24;
+    text-align: center;
+}
+
+.category:hover {
+    color: #7c4a24 !important;
+}
+

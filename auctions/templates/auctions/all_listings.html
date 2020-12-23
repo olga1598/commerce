@@ -1,0 +1,34 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if category_name %}
+        <h1>Items in category {{ category_name }}.</h1>
+    {% else %}
+        <h2>Active Listings</h2>
+    {% endif %}
+    <hr />
+
+    {% for listing in listings %}    
+            <div class="card flex-row active_listings">
+                <div class="card-header border-0">
+                    <img src="{{ listing.listing_url }}" alt="listing_img" style="width:300px;">
+                </div>
+                <div class="card-block px-2" style="margin-top: 10px; width:100%;">
+                    <h4 class="card-title">{{ listing.title }}</h4>
+                    <p class="card-text">Price: ${{ listing.starting_bid }}</p>
+                    <p class="card-text" style="font-size: 10px;">Created: {{ listing.created }}</p>
+                    {% if listing.active %}
+                        <a href="{% url 'listing_details' listing.id %}"><button class="btn details">Look for details</button></a>
+                    {% else %}
+                        <div>
+                            <a href="{% url 'listing_details' listing.id %}"><button class="btn details">Look for details</button></a>
+                            <button class="btn btn-danger" disabled="true" >The auction is closed</button>
+                            <hr/>
+                            <p>The winner is {{ listing.winner }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <br />
+    {% endfor %}
+{% endblock %}

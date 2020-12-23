@@ -1,0 +1,17 @@
+{% extends "auctions/layout.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <div class="jumbotron create">
+        <h2>Create New Listing</h2>
+
+        <form action="{% url 'create_new' %}" method="post" class="create_form">
+
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" class="add_listing">
+
+        </form>
+    </div>
+{% endblock %}
